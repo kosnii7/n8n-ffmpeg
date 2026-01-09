@@ -1,14 +1,12 @@
-# παίρνουμε ffmpeg έτοιμο
-FROM jrottenberg/ffmpeg:6.1-alpine AS ffmpeg
+# Static binaries που περιέχουν σίγουρα ffmpeg + ffprobe
+FROM mwader/static-ffmpeg:7.0 AS ffmpeg
 
-# hardened n8n
 FROM docker.n8n.io/n8nio/n8n:latest
 
 USER root
 
-# ✅ σωστά paths
-COPY --from=ffmpeg /usr/bin/ffmpeg /usr/local/bin/ffmpeg
-COPY --from=ffmpeg /usr/bin/ffprobe /usr/local/bin/ffprobe
+COPY --from=ffmpeg /ffmpeg /usr/local/bin/ffmpeg
+COPY --from=ffmpeg /ffprobe /usr/local/bin/ffprobe
 
 RUN chmod +x /usr/local/bin/ffmpeg /usr/local/bin/ffprobe
 
